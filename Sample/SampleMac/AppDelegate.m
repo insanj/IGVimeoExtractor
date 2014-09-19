@@ -17,11 +17,11 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [YTVimeoExtractor fetchVideoURLFromURL:@"https://vimeo.com/105646584" quality:YTVimeoVideoQualityHigh completionHandler:^(NSURL *videoURL, NSError *error, YTVimeoVideoQuality quality) {
+    [YTVimeoExtractor fetchVideoURLFromURL:@"https://vimeo.com/105646584" quality:YTVimeoVideoQualityHigh completionHandler:^(NSURL *videoURL, NSString* title, NSError *error, YTVimeoVideoQuality quality) {
         if (error) {
             NSLog(@"Error : %@", [error localizedDescription]);
         } else if (videoURL) {
-            NSLog(@"Extracted url : %@", [videoURL absoluteString]);
+            NSLog(@"Extracted url : %@, title: %@", [videoURL absoluteString], title);
         }
     }];
 }
