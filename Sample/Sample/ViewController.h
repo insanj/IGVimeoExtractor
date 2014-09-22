@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "YTVimeoExtractor.h"
+#import "IGVimeoExtractor.h"
 
 @interface ViewController : UIViewController
 

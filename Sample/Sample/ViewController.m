@@ -10,9 +10,9 @@
 
 @interface ViewController ()
 
-@property (strong, nonatomic) YTVimeoExtractor *extractor;
+@property (strong, nonatomic) IGVimeoExtractor *extractor;
 @property (strong, nonatomic) MPMoviePlayerViewController *playerView;
-@property (nonatomic) YTVimeoVideoQuality quality;
+@property (nonatomic) IGVimeoVideoQuality quality;
 
 @end
 
@@ -22,7 +22,7 @@
 {
     [super viewDidLoad];
     
-    self.quality = YTVimeoVideoQualityMedium;
+    self.quality = IGVimeoVideoQualityMedium;
 }
 
 - (void)didReceiveMemoryWarning
@@ -34,7 +34,7 @@
 
 - (IBAction)playVideo:(id)sender
 {
-    [YTVimeoExtractor fetchVideoURLFromURL:self.textURL.text quality:self.quality completionHandler:^(NSURL *videoURL, NSString* title, NSError *error, YTVimeoVideoQuality quality) {
+    [IGVimeoExtractor fetchVideoURLFromURL:self.textURL.text quality:self.quality completionHandler:^(NSURL *videoURL, NSString* title, NSError *error, IGVimeoVideoQuality quality) {
         if (error) {
             NSLog(@"Error : %@", [error localizedDescription]);
         } else if (videoURL) {
@@ -53,13 +53,13 @@
 {
     switch (self.qualitySeg.selectedSegmentIndex) {
         case 0:
-            self.quality = YTVimeoVideoQualityLow;
+            self.quality = IGVimeoVideoQualityLow;
             break;
         case 1:
-            self.quality = YTVimeoVideoQualityMedium;
+            self.quality = IGVimeoVideoQualityMedium;
             break;
         case 2:
-            self.quality = YTVimeoVideoQualityHigh;
+            self.quality = IGVimeoVideoQualityHigh;
             
         default:
             break;

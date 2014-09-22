@@ -1,16 +1,16 @@
 //
-//  YTVimeoExtractor.m
-//  YTVimeoExtractor
+//  IGVimeoExtractor.m
+//  IGVimeoExtractor
 //
 //  Created by Louis Larpin on 18/02/13.
 //
 
-#import "YTVimeoExtractor.h"
+#import "IGVimeoExtractor.h"
 
-NSString *const YTVimeoPlayerConfigURL = @"http://player.vimeo.com/video/%@/config";
-NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
+NSString *const IGVimeoPlayerConfigURL = @"http://player.vimeo.com/video/%@/config";
+NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
 
-@interface YTVimeoExtractor ()
+@interface IGVimeoExtractor ()
 
 @property (strong, nonatomic) NSURLConnection *connection;
 @property (strong, nonatomic) NSMutableData *buffer;
@@ -20,37 +20,37 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
 
 @end
 
-@implementation YTVimeoExtractor
+@implementation IGVimeoExtractor
 
-+ (void)fetchVideoURLFromURL:(NSString *)videoURL quality:(YTVimeoVideoQuality)quality referer:(NSString *)referer completionHandler:(completionHandler)handler
++ (void)fetchVideoURLFromURL:(NSString *)videoURL quality:(IGVimeoVideoQuality)quality referer:(NSString *)referer completionHandler:(completionHandler)handler
 {
-    YTVimeoExtractor *extractor = [[YTVimeoExtractor alloc] initWithURL:videoURL quality:quality referer:referer];
+    IGVimeoExtractor *extractor = [[IGVimeoExtractor alloc] initWithURL:videoURL quality:quality referer:referer];
     extractor.completionHandler = handler;
     [extractor start];
 }
 
-+ (void)fetchVideoURLFromID:(NSString *)videoID quality:(YTVimeoVideoQuality)quality referer:(NSString *)referer completionHandler:(completionHandler)handler
++ (void)fetchVideoURLFromID:(NSString *)videoID quality:(IGVimeoVideoQuality)quality referer:(NSString *)referer completionHandler:(completionHandler)handler
 {
-    YTVimeoExtractor *extractor = [[YTVimeoExtractor alloc] initWithID:videoID quality:quality referer:referer];
+    IGVimeoExtractor *extractor = [[IGVimeoExtractor alloc] initWithID:videoID quality:quality referer:referer];
     extractor.completionHandler = handler;
     [extractor start];
 }
-+ (void)fetchVideoURLFromURL:(NSString *)videoURL quality:(YTVimeoVideoQuality)quality completionHandler:(completionHandler)handler
++ (void)fetchVideoURLFromURL:(NSString *)videoURL quality:(IGVimeoVideoQuality)quality completionHandler:(completionHandler)handler
 {
-    return [YTVimeoExtractor fetchVideoURLFromURL:videoURL quality:quality referer:nil completionHandler:handler];
+    return [IGVimeoExtractor fetchVideoURLFromURL:videoURL quality:quality referer:nil completionHandler:handler];
 }
 
-+ (void)fetchVideoURLFromID:(NSString *)videoID quality:(YTVimeoVideoQuality)quality completionHandler:(completionHandler)handler
++ (void)fetchVideoURLFromID:(NSString *)videoID quality:(IGVimeoVideoQuality)quality completionHandler:(completionHandler)handler
 {
-    return [YTVimeoExtractor fetchVideoURLFromID:videoID quality:quality referer:nil completionHandler:handler];}
+    return [IGVimeoExtractor fetchVideoURLFromID:videoID quality:quality referer:nil completionHandler:handler];}
 
 #pragma mark - Constructors
 
-- (id)initWithID:(NSString *)videoID quality:(YTVimeoVideoQuality)quality referer:(NSString *)referer
+- (id)initWithID:(NSString *)videoID quality:(IGVimeoVideoQuality)quality referer:(NSString *)referer
 {
     self = [super init];
     if (self) {
-        _vimeoURL = [NSURL URLWithString:[NSString stringWithFormat:YTVimeoPlayerConfigURL, videoID]];
+        _vimeoURL = [NSURL URLWithString:[NSString stringWithFormat:IGVimeoPlayerConfigURL, videoID]];
         _quality = quality;
         _referer = referer;
         _running = NO;
@@ -58,18 +58,18 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
     return self;
 }
 
-- (id)initWithURL:(NSString *)videoURL quality:(YTVimeoVideoQuality)quality referer:(NSString *)referer
+- (id)initWithURL:(NSString *)videoURL quality:(IGVimeoVideoQuality)quality referer:(NSString *)referer
 {
     NSString *videoID = [[videoURL componentsSeparatedByString:@"/"] lastObject];
     return [self initWithID:videoID quality:quality referer:referer];
 }
 
-- (id)initWithID:(NSString *)videoID quality:(YTVimeoVideoQuality)quality
+- (id)initWithID:(NSString *)videoID quality:(IGVimeoVideoQuality)quality
 {
     return [self initWithID:videoID quality:quality referer:nil];
 }
 
-- (id)initWithURL:(NSString *)videoURL quality:(YTVimeoVideoQuality)quality {
+- (id)initWithURL:(NSString *)videoURL quality:(IGVimeoVideoQuality)quality {
     return [self initWithURL:videoURL quality:quality referer:nil];
 }
 
@@ -86,11 +86,11 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
 - (void)start
 {
     if (!(self.delegate || self.completionHandler) || !self.vimeoURL) {
-        [self extractorFailedWithMessage:@"Delegate, block or URL not specified" errorCode:YTVimeoExtractorErrorCodeNotInitialized];
+        [self extractorFailedWithMessage:@"Delegate, block or URL not specified" errorCode:IGVimeoExtractorErrorCodeNotInitialized];
         return;
     }
     if (self.running) {
-        [self extractorFailedWithMessage:@"Already in progress" errorCode:YTVimeoExtractorErrorCodeNotInitialized];
+        [self extractorFailedWithMessage:@"Already in progress" errorCode:IGVimeoExtractorErrorCodeNotInitialized];
         return;
     }
 
@@ -109,7 +109,7 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
 
 - (void)extractorFailedWithMessage:(NSString*)message errorCode:(int)code {
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
-    NSError *error = [NSError errorWithDomain:YTVimeoExtractorErrorDomain code:code userInfo:userInfo];
+    NSError *error = [NSError errorWithDomain:IGVimeoExtractorErrorDomain code:code userInfo:userInfo];
 
     if (self.completionHandler) {
         self.completionHandler(nil, nil, error, self.quality);
@@ -127,7 +127,7 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
     NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
     NSInteger statusCode = [httpResponse statusCode];
     if (statusCode != 200) {
-        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:YTVimeoExtractorErrorInvalidIdentifier];
+        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:IGVimeoExtractorErrorInvalidIdentifier];
         [connection cancel];
     }
 
@@ -146,25 +146,25 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
     NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:self.buffer options:NSJSONReadingAllowFragments error:&error];
 
     if (error) {
-        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:YTVimeoExtractorErrorInvalidIdentifier];
+        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:IGVimeoExtractorErrorInvalidIdentifier];
         return;
     }
 
     NSDictionary *filesInfo = [jsonData valueForKeyPath:@"request.files.h264"];
     if (!filesInfo) {
-        [self extractorFailedWithMessage:@"Unsupported video codec" errorCode:YTVimeoExtractorErrorUnsupportedCodec];
+        [self extractorFailedWithMessage:@"Unsupported video codec" errorCode:IGVimeoExtractorErrorUnsupportedCodec];
         return;
     }
 
     NSDictionary *videoInfo;
-    YTVimeoVideoQuality videoQuality = self.quality;
+    IGVimeoVideoQuality videoQuality = self.quality;
     do {
         videoInfo = [filesInfo objectForKey:@[ @"mobile", @"sd", @"hd" ][videoQuality]];
         videoQuality--;
-    } while (!videoInfo && videoQuality >= YTVimeoVideoQualityLow);
+    } while (!videoInfo && videoQuality >= IGVimeoVideoQualityLow);
 
     if (!videoInfo) {
-        [self extractorFailedWithMessage:@"Unavailable video quality" errorCode:YTVimeoExtractorErrorUnavailableQuality];
+        [self extractorFailedWithMessage:@"Unavailable video quality" errorCode:IGVimeoExtractorErrorUnavailableQuality];
         return;
     }
 
@@ -182,7 +182,7 @@ NSString *const YTVimeoExtractorErrorDomain = @"YTVimeoExtractorErrorDomain";
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-    [self extractorFailedWithMessage:[error localizedDescription] errorCode:YTVimeoExtractorErrorInvalidIdentifier];
+    [self extractorFailedWithMessage:[error localizedDescription] errorCode:IGVimeoExtractorErrorInvalidIdentifier];
 }
 
 @end
