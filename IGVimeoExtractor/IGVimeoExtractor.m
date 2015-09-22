@@ -35,13 +35,8 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
 @end
 
 @interface IGVimeoExtractor ()
-
-@property (strong, nonatomic) NSURLConnection *connection;
-@property (strong, nonatomic) NSMutableData *buffer;
 @property (copy, nonatomic) completionHandler completionHandler;
-
 - (void)extractorFailedWithMessage:(NSString*)message errorCode:(int)code;
-
 @end
 
 @implementation IGVimeoExtractor
@@ -59,6 +54,7 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
     extractor.completionHandler = handler;
     [extractor start];
 }
+
 + (void)fetchVideoURLFromURL:(NSString *)videoURL completionHandler:(completionHandler)handler
 {
     return [IGVimeoExtractor fetchVideoURLFromURL:videoURL referer:nil completionHandler:handler];
@@ -76,7 +72,6 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
     if (self) {
         _vimeoURL = [NSURL URLWithString:[NSString stringWithFormat:IGVimeoPlayerConfigURL, videoID]];
         _referer = referer;
-        _running = NO;
     }
     return self;
 }
@@ -96,24 +91,12 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
     return [self initWithURL:videoURL referer:nil];
 }
 
-- (void)dealloc
-{
-    [self.connection cancel];
-    self.connection = nil;
-    self.buffer = nil;
-    self.delegate = nil;
-}
-
 #pragma mark - Public
 
 - (void)start
 {
-    if (!(self.delegate || self.completionHandler) || !self.vimeoURL) {
-        [self extractorFailedWithMessage:@"Delegate, block or URL not specified" errorCode:IGVimeoExtractorErrorCodeNotInitialized];
-        return;
-    }
-    if (self.running) {
-        [self extractorFailedWithMessage:@"Already in progress" errorCode:IGVimeoExtractorErrorCodeNotInitialized];
+    if (!(self.completionHandler) || !self.vimeoURL) {
+        [self extractorFailedWithMessage:@"block or URL not specified" errorCode:IGVimeoExtractorErrorCodeNotInitialized];
         return;
     }
 
@@ -124,8 +107,49 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
         [request setValue:self.referer forHTTPHeaderField:@"Referer"];
     }
 
-    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    _running = YES;
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (error) {
+            self.completionHandler(nil, error);
+            return;
+        }
+
+        NSError* jsonError;
+        NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+        if (jsonError) {
+            [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:IGVimeoExtractorErrorInvalidIdentifier];
+            return;
+        }
+        
+        NSDictionary *filesInfo = [jsonData valueForKeyPath:@"request.files.h264"];
+        if (!filesInfo) {
+            [self extractorFailedWithMessage:@"Unsupported video codec" errorCode:IGVimeoExtractorErrorUnsupportedCodec];
+            return;
+        }
+        
+        NSURL *thumbnailURL = [NSURL URLWithString:[jsonData valueForKeyPath:@"video.thumbs.base"]];
+        NSString* title = [jsonData valueForKeyPath:@"video.title"];
+        
+        NSDictionary *videoInfo;
+        NSMutableArray* videos = [NSMutableArray array];
+        IGVimeoVideoQuality videoQuality = IGVimeoVideoQualityHigh;
+        NSArray* qualityKeys = @[ @"mobile", @"sd", @"hd" ];
+        do {
+            videoInfo = [filesInfo objectForKey:qualityKeys[videoQuality]];
+            
+            NSURL *videoURL = [NSURL URLWithString:[videoInfo objectForKey:@"url"]];
+            if (videoURL) {
+                IGVimeoVideo* video = [IGVimeoVideo videoWithTitle:title videoURL:videoURL thumbnailURL:thumbnailURL quality:videoQuality];
+                [videos addObject:video];
+            }
+            videoQuality--;
+        } while (videoQuality >= IGVimeoVideoQualityLow && videoQuality <= IGVimeoVideoQualityHigh);
+        
+        if ([videos count] > 0) {
+            self.completionHandler(videos, nil);
+        } else {
+            [self extractorFailedWithMessage:@"Video not found" errorCode:IGVimeoExtractorErrorUnexpected];
+        }
+    }] resume];
 }
 
 # pragma mark - Private
@@ -133,86 +157,7 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
 - (void)extractorFailedWithMessage:(NSString*)message errorCode:(int)code {
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
     NSError *error = [NSError errorWithDomain:IGVimeoExtractorErrorDomain code:code userInfo:userInfo];
-
-    if (self.completionHandler) {
-        self.completionHandler(nil, error);
-    }
-    else if ([self.delegate respondsToSelector:@selector(vimeoExtractor:failedExtractingVimeoURLWithError:)]) {
-        [self.delegate vimeoExtractor:self failedExtractingVimeoURLWithError:error];
-    }
-    _running = NO;
-}
-
-#pragma mark - NSURLConnectionDelegate
-
--(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
-{
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-    NSInteger statusCode = [httpResponse statusCode];
-    if (statusCode != 200) {
-        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:IGVimeoExtractorErrorInvalidIdentifier];
-        [connection cancel];
-    }
-
-    NSUInteger capacity = (response.expectedContentLength != NSURLResponseUnknownLength) ? (uint)response.expectedContentLength : 0;
-    self.buffer = [[NSMutableData alloc] initWithCapacity:capacity];
-}
-
--(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    [self.buffer appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    NSError *error;
-    NSDictionary *jsonData = [NSJSONSerialization JSONObjectWithData:self.buffer options:NSJSONReadingAllowFragments error:&error];
-
-    if (error) {
-        [self extractorFailedWithMessage:@"Invalid video indentifier" errorCode:IGVimeoExtractorErrorInvalidIdentifier];
-        return;
-    }
-
-    NSDictionary *filesInfo = [jsonData valueForKeyPath:@"request.files.h264"];
-    if (!filesInfo) {
-        [self extractorFailedWithMessage:@"Unsupported video codec" errorCode:IGVimeoExtractorErrorUnsupportedCodec];
-        return;
-    }
-    
-    NSURL *thumbnailURL = [NSURL URLWithString:[jsonData valueForKeyPath:@"video.thumbs.base"]];
-    NSString* title = [jsonData valueForKeyPath:@"video.title"];
-    
-    NSDictionary *videoInfo;
-    NSMutableArray* videos = [NSMutableArray array];
-    IGVimeoVideoQuality videoQuality = IGVimeoVideoQualityHigh;
-    NSArray* qualityKeys = @[ @"mobile", @"sd", @"hd" ];
-    do {
-        videoInfo = [filesInfo objectForKey:qualityKeys[videoQuality]];
-        
-        NSURL *videoURL = [NSURL URLWithString:[videoInfo objectForKey:@"url"]];
-        if (videoURL) {
-            IGVimeoVideo* video = [IGVimeoVideo videoWithTitle:title videoURL:videoURL thumbnailURL:thumbnailURL quality:videoQuality];
-            [videos addObject:video];
-        }
-        videoQuality--;
-    } while (videoQuality >= IGVimeoVideoQualityLow && videoQuality <= IGVimeoVideoQualityHigh);
-
-    if ([videos count] > 0) {
-        if (self.completionHandler) {
-            self.completionHandler(videos, nil);
-        } else if ([self.delegate respondsToSelector:@selector(vimeoExtractor:didSuccessfullyExtractVimeoURL:withQuality:)]) {
-            [self.delegate vimeoExtractor:self didSuccessfullyExtractVimeoVideos:videos];
-        }
-    } else {
-        [self extractorFailedWithMessage:@"Video not found" errorCode:IGVimeoExtractorErrorUnexpected];
-    }
-
-    _running = NO;
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-    [self extractorFailedWithMessage:[error localizedDescription] errorCode:IGVimeoExtractorErrorInvalidIdentifier];
+    self.completionHandler(nil, error);
 }
 
 @end
