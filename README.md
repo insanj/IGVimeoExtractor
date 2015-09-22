@@ -53,7 +53,7 @@ self.extractor.delegate = self;
 and implement YTVimeoExtractor delegate methods in your ViewController.
 
 ```objc
-- (void)vimeoExtractor:(IGVimeoExtractor *)extractor didSuccessfullyExtractVimeoURL:(NSURL *)videoURL withQuality:(YTVimeoVideoQuality)quality
+- (void)vimeoExtractor:(IGVimeoExtractor * _Nonnull)extractor didSuccessfullyExtractVimeoVideos:(NSArray<IGVimeoVideo*>* _Nonnull)videos
 {
     // handle success
 }
@@ -68,18 +68,9 @@ If the Vimeo videos have domain-level restrictions and can only be played from p
 
 ```objc
 [YTVimeoExtractor fetchVideoURLFromURL:@"http://vimeo.com/58600663"
-                               quality:YTVimeoVideoQualityMedium
                                referer:@"http://www.mywebsite.com"
-                     completionHandler:^(NSURL *videoURL, NSError *error, YTVimeoVideoQuality quality) {
-    if (error) {
-        // handle error
-        NSLog(@"Video URL: %@", [videoURL absoluteString]);
-    } else {
-        // run player
-        self.playerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [self.playerViewController.moviePlayer prepareToPlay];
-        [self presentViewController:self.playerViewController animated:YES completion:nil];
-    }
+                     completionHandler:^(IGVimeoVideo* video, NSError *error) {
+// handle results
 }];
 ```
 
@@ -87,7 +78,7 @@ Check the sample application for more details.
 
 ## Requirements
 
-YTVimeoExtractor requires iOS 5.0 and above as it is deployed for an ARC environment.
+YTVimeoExtractor requires iOS 7.0 and above as it is deployed for an ARC environment.
 
 ## License
 
