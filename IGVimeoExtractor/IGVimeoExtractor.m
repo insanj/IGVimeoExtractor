@@ -7,8 +7,27 @@
 
 #import "IGVimeoExtractor.h"
 
-NSString *const IGVimeoPlayerConfigURL = @"http://player.vimeo.com/video/%@/config";
+NSString *const IGVimeoPlayerConfigURL = @"https://player.vimeo.com/video/%@/config";
 NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
+
+@implementation IGVimeoVideo : NSObject
+
++(instancetype) videoWithTitle:(NSString*)title videoURL:(NSURL*)videoURL thumbnailURL:(NSURL*)thumbnailURL quality:(IGVimeoVideoQuality)quality
+{
+    return [[self alloc] initWithTitle:title videoURL:videoURL thumbnailURL:thumbnailURL quality:quality];
+}
+
+-(instancetype) initWithTitle:(NSString*)title videoURL:(NSURL*)videoURL thumbnailURL:(NSURL*)thumbnailURL quality:(IGVimeoVideoQuality)quality
+{
+    IGVimeoVideo* video = [super init];
+    video.title = title;
+    video.videoURL = videoURL;
+    video.thumbnailURL = thumbnailURL;
+    video.quality = quality;
+    return video;
+}
+
+@end
 
 @interface IGVimeoExtractor ()
 
@@ -112,7 +131,7 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
     NSError *error = [NSError errorWithDomain:IGVimeoExtractorErrorDomain code:code userInfo:userInfo];
 
     if (self.completionHandler) {
-        self.completionHandler(nil, nil, error, self.quality);
+        self.completionHandler(nil, error);
     }
     else if ([self.delegate respondsToSelector:@selector(vimeoExtractor:failedExtractingVimeoURLWithError:)]) {
         [self.delegate vimeoExtractor:self failedExtractingVimeoURLWithError:error];
@@ -167,14 +186,20 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
         [self extractorFailedWithMessage:@"Unavailable video quality" errorCode:IGVimeoExtractorErrorUnavailableQuality];
         return;
     }
-
+    
+    NSURL *thumbnailURL = [NSURL URLWithString:[jsonData valueForKeyPath:@"video.thumbs.base"]];
     NSURL *fileURL = [NSURL URLWithString:[videoInfo objectForKey:@"url"]];
     NSString* title = [jsonData valueForKeyPath:@"video.title"];
-    if (self.completionHandler) {
-        self.completionHandler(fileURL, title, nil, videoQuality);
-    }
-    else if ([self.delegate respondsToSelector:@selector(vimeoExtractor:didSuccessfullyExtractVimeoURL:withQuality:)]) {
-        [self.delegate vimeoExtractor:self didSuccessfullyExtractVimeoURL:fileURL withQuality:videoQuality];
+    
+    if (title && thumbnailURL && fileURL) {
+        if (self.completionHandler) {
+            self.completionHandler([IGVimeoVideo videoWithTitle:title videoURL:fileURL thumbnailURL:thumbnailURL quality:videoQuality], nil);
+        }
+        else if ([self.delegate respondsToSelector:@selector(vimeoExtractor:didSuccessfullyExtractVimeoURL:withQuality:)]) {
+            [self.delegate vimeoExtractor:self didSuccessfullyExtractVimeoURL:fileURL withQuality:videoQuality];
+        }
+    } else {
+        [self extractorFailedWithMessage:@"Video not found" errorCode:IGVimeoExtractorErrorUnexpected];
     }
 
     _running = NO;
