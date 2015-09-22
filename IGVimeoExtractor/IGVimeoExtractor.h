@@ -27,7 +27,7 @@ typedef enum IGVimeoVideoQuality : NSUInteger {
 @class  IGVimeoVideo;
 @protocol  IGVimeoExtractorDelegate;
 
-typedef void (^completionHandler) (IGVimeoVideo * _Nullable  video, NSError * _Nullable error);
+typedef void (^completionHandler) (NSArray<IGVimeoVideo*>* _Nullable videos, NSError * _Nullable error);
 
 @interface IGVimeoVideo : NSObject
 @property (nonatomic, copy) NSString* _Nonnull title;
@@ -42,21 +42,20 @@ typedef void (^completionHandler) (IGVimeoVideo * _Nullable  video, NSError * _N
 @interface IGVimeoExtractor : NSObject <NSURLConnectionDelegate>
 
 @property (nonatomic, readonly) BOOL running;
-@property (nonatomic, readonly) IGVimeoVideoQuality quality;
 @property (nonatomic, readonly) NSString* _Nonnull referer;
 @property (strong, nonatomic, readonly) NSURL * _Nullable vimeoURL;
 
 @property (unsafe_unretained, nonatomic) id<IGVimeoExtractorDelegate> _Nullable delegate;
 
-+ (void)fetchVideoURLFromURL:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality completionHandler:(completionHandler _Nullable)handler;
-+ (void)fetchVideoURLFromID:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality completionHandler:(completionHandler _Nullable)handler;
-+ (void)fetchVideoURLFromURL:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality referer:(NSString * _Nullable)referer completionHandler:(completionHandler _Nullable)handler;
-+ (void)fetchVideoURLFromID:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality referer:(NSString * _Nullable)referer completionHandler:(completionHandler _Nullable)handler;
++ (void)fetchVideoURLFromURL:(NSString * _Nonnull)videoURL completionHandler:(completionHandler _Nullable)handler;
++ (void)fetchVideoURLFromID:(NSString * _Nonnull)videoURL completionHandler:(completionHandler _Nullable)handler;
++ (void)fetchVideoURLFromURL:(NSString * _Nonnull)videoURL referer:(NSString * _Nullable)referer completionHandler:(completionHandler _Nullable)handler;
++ (void)fetchVideoURLFromID:(NSString * _Nonnull)videoURL referer:(NSString * _Nullable)referer completionHandler:(completionHandler _Nullable)handler;
 
-- (instancetype _Nonnull)initWithURL:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality;
-- (instancetype _Nonnull)initWithID:(NSString * _Nonnull)videoID quality:(IGVimeoVideoQuality)quality;
-- (instancetype _Nonnull)initWithURL:(NSString * _Nonnull)videoURL quality:(IGVimeoVideoQuality)quality referer:(NSString * _Nullable)referer;
-- (instancetype _Nonnull)initWithID:(NSString * _Nonnull)videoID quality:(IGVimeoVideoQuality)quality referer:(NSString * _Nullable)referer;
+- (instancetype _Nonnull)initWithURL:(NSString * _Nonnull)videoURL;
+- (instancetype _Nonnull)initWithID:(NSString * _Nonnull)videoID;
+- (instancetype _Nonnull)initWithURL:(NSString * _Nonnull)videoURL referer:(NSString * _Nullable)referer;
+- (instancetype _Nonnull)initWithID:(NSString * _Nonnull)videoID referer:(NSString * _Nullable)referer;
 
 - (void)start;
 
@@ -64,7 +63,7 @@ typedef void (^completionHandler) (IGVimeoVideo * _Nullable  video, NSError * _N
 
 @protocol IGVimeoExtractorDelegate <NSObject>
 
-- (void)vimeoExtractor:(IGVimeoExtractor * _Nonnull)extractor didSuccessfullyExtractVimeoURL:(NSURL * _Nullable)videoURL withQuality:(IGVimeoVideoQuality)quality;
+- (void)vimeoExtractor:(IGVimeoExtractor * _Nonnull)extractor didSuccessfullyExtractVimeoVideos:(NSArray<IGVimeoVideo*>* _Nonnull)videos;
 - (void)vimeoExtractor:(IGVimeoExtractor * _Nonnull)extractor failedExtractingVimeoURLWithError:(NSError * _Nullable)error;
 
 @end

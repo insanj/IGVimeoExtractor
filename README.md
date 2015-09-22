@@ -1,23 +1,25 @@
-## YTVimeoExtractor
+## IGVimeoExtractor
 
-YTVimeoExtractor helps you get mp4 urls which can be use in iOS's native player. You can even choose between mobile, standard and high definition quality.
+IGVimeoExtractor helps you get mp4 urls which can be use in iOS's native player. You can even choose between mobile, standard and high definition quality.
 
-YTVimeoExtractor doesn't use UIWebView which makes it fast and clean.
+IGVimeoExtractor doesn't use UIWebView which makes it fast and clean.
+
+IGVimeoExtractor is a forkof YTVimeoExtractor.
 
 ## Install
 
 The preferred way of installation is via [CocoaPods](http://cocoapods.org). Just add to your Podfile
 
 ```ruby
-pod 'YTVimeoExtractor'
+pod 'IGVimeoExtractor'
 ```
 
 and run `pod install`.
 
-Alternatively you can just copy the YTVimeoExtractor folder to your project.
+Alternatively you can just copy the IGVimeoExtractor folder to your project.
 
 ```objc
-#import "YTVimeoExtractor.h"
+#import "IGVimeoExtractor.h"
 ```
 
 ## Usage
@@ -25,25 +27,25 @@ Alternatively you can just copy the YTVimeoExtractor folder to your project.
 Use the block based methods and pass it the video url and the desired quality
 
 ```objc
-[YTVimeoExtractor fetchVideoURLFromURL:@"http://vimeo.com/58600663"
-                               quality:YTVimeoVideoQualityMedium
-                     completionHandler:^(NSURL *videoURL, NSError *error, YTVimeoVideoQuality quality) {
+[IGVimeoExtractor fetchVideoURLFromURL:self.textURL.text quality:self.quality completionHandler:^(IGVimeoVideo* video, NSError *error) {
     if (error) {
-    	// handle error
-    	NSLog(@"Video URL: %@", [videoURL absoluteString]);
-	} else {
-		// run player
-		self.playerViewController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-    	[self.playerViewController.moviePlayer prepareToPlay];
-    	[self presentViewController:self.playerViewController animated:YES completion:nil];
-	}
+        NSLog(@"Error : %@", [error localizedDescription]);
+    } else if (video) {
+        NSLog(@"Extracted url : %@, title: %@", [video.videoURL absoluteString], video.title);
+        
+        self.playerView = [[MPMoviePlayerViewController alloc] initWithContentURL:video.videoURL];
+        [self.playerView.moviePlayer prepareToPlay];
+        [self presentViewController:self.playerView animated:YES completion:^(void) {
+            self.playerView = nil;
+        }];
+    }
 }];
 ```
 
-or create an instance of YTVimeoExtractor.
+or create an instance of IGVimeoExtractor.
 
 ```objc
-self.extractor = [[YTVimeoExtractor alloc] initWithURL:@"http://vimeo.com/58600663" quality:YTVimeoVideoQualityMedium];
+self.extractor = [[IGVimeoExtractor alloc] initWithURL:@"http://vimeo.com/58600663" quality:YTVimeoVideoQualityMedium];
 self.extractor.delegate = self;
 [self.extractor start];
 ```
@@ -51,12 +53,12 @@ self.extractor.delegate = self;
 and implement YTVimeoExtractor delegate methods in your ViewController.
 
 ```objc
-- (void)vimeoExtractor:(YTVimeoExtractor *)extractor didSuccessfullyExtractVimeoURL:(NSURL *)videoURL withQuality:(YTVimeoVideoQuality)quality
+- (void)vimeoExtractor:(IGVimeoExtractor *)extractor didSuccessfullyExtractVimeoURL:(NSURL *)videoURL withQuality:(YTVimeoVideoQuality)quality
 {
     // handle success
 }
 
-- (void)vimeoExtractor:(YTVimeoExtractor *)extractor failedExtractingVimeoURLWithError:(NSError *)error;
+- (void)vimeoExtractor:(IGVimeoExtractor *)extractor failedExtractingVimeoURLWithError:(NSError *)error;
 {
     // handle error
 }

@@ -34,13 +34,13 @@
 
 - (IBAction)playVideo:(id)sender
 {
-    [IGVimeoExtractor fetchVideoURLFromURL:self.textURL.text quality:self.quality completionHandler:^(IGVimeoVideo* video, NSError *error) {
+    [IGVimeoExtractor fetchVideoURLFromURL:self.textURL.text completionHandler:^(NSArray<IGVimeoVideo*>* videos, NSError *error) {
         if (error) {
             NSLog(@"Error : %@", [error localizedDescription]);
-        } else if (video) {
-            NSLog(@"Extracted url : %@, title: %@", [video.videoURL absoluteString], video.title);
+        } else if ([videos count] > 0) {
+            NSLog(@"Extracted videos: %@", videos);
             
-            self.playerView = [[MPMoviePlayerViewController alloc] initWithContentURL:video.videoURL];
+            self.playerView = [[MPMoviePlayerViewController alloc] initWithContentURL:videos.firstObject.videoURL];
             [self.playerView.moviePlayer prepareToPlay];
             [self presentViewController:self.playerView animated:YES completion:^(void) {
                 self.playerView = nil;
