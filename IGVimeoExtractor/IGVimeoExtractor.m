@@ -120,7 +120,7 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
             return;
         }
         
-        NSDictionary *filesInfo = [jsonData valueForKeyPath:@"request.files.h264"];
+        NSArray *filesInfo = [jsonData valueForKeyPath:@"request.files.progressive"];
         if (!filesInfo) {
             [self extractorFailedWithMessage:@"Unsupported video codec" errorCode:IGVimeoExtractorErrorUnsupportedCodec];
             return;
@@ -129,21 +129,16 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
         NSURL *thumbnailURL = [NSURL URLWithString:[jsonData valueForKeyPath:@"video.thumbs.base"]];
         NSString* title = [jsonData valueForKeyPath:@"video.title"];
         
-        NSDictionary *videoInfo;
         NSMutableArray* videos = [NSMutableArray array];
-        IGVimeoVideoQuality videoQuality = IGVimeoVideoQualityHigh;
-        NSArray* qualityKeys = @[ @"mobile", @"sd", @"hd" ];
-        do {
-            videoInfo = [filesInfo objectForKey:qualityKeys[videoQuality]];
-            
+        [filesInfo enumerateObjectsUsingBlock:^(NSDictionary*  _Nonnull videoInfo, NSUInteger idx, BOOL * _Nonnull stop) {
+            IGVimeoVideoQuality videoQuality = [[self class] videoQualityWithString:[videoInfo objectForKey:@"quality"]];
             NSURL *videoURL = [NSURL URLWithString:[videoInfo objectForKey:@"url"]];
             if (videoURL) {
                 IGVimeoVideo* video = [IGVimeoVideo videoWithTitle:title videoURL:videoURL thumbnailURL:thumbnailURL quality:videoQuality];
                 [videos addObject:video];
             }
-            videoQuality--;
-        } while (videoQuality >= IGVimeoVideoQualityLow && videoQuality <= IGVimeoVideoQualityHigh);
-        
+        }];
+
         if ([videos count] > 0) {
             self.completionHandler(videos, nil);
         } else {
@@ -158,6 +153,16 @@ NSString *const IGVimeoExtractorErrorDomain = @"IGVimeoExtractorErrorDomain";
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject:message forKey:NSLocalizedDescriptionKey];
     NSError *error = [NSError errorWithDomain:IGVimeoExtractorErrorDomain code:code userInfo:userInfo];
     self.completionHandler(nil, error);
+}
+
++(IGVimeoVideoQuality) videoQualityWithString:(NSString*)quality {
+    if ([quality isEqualToString:@"270p"]) {
+        return IGVimeoVideoQualityLow;
+    } else if ([quality isEqualToString:@"360p"]) {
+        return IGVimeoVideoQualityMedium;
+    } else {
+        return IGVimeoVideoQualityHigh;
+    }
 }
 
 @end
