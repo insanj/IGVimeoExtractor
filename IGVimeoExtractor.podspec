@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "IGVimeoExtractor"
-  s.version      = "1.1.0"
+  s.version      = "1.2.0"
   s.summary      = "Fetches Vimeo's mp4 URLs for iOS."
   s.description  = <<-DESC
-                    YTVimeoExtractor is a class which lets you get the iOS
-                    compatible video url from Vimeo which you can use in
-                    MPMoviePlayerController, no need to use a UIWebView.
+                    IGVimeoExtractor lets you get the iOS compatible video url 
+                    from Vimeo which you can use in MPMoviePlayerController, 
+                    no need to use a UIWebView.
                     DESC
   s.homepage     = "https://github.com/siuying/IGVimeoExtractor"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
