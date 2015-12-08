@@ -31,7 +31,12 @@
             return;
         }
 
-        XCTAssert(videos.count > 0, @"should have more than one video");
+        XCTAssert(videos.count == 3, @"should have 3 video");
+        [videos enumerateObjectsUsingBlock:^(IGVimeoVideo * _Nonnull video, NSUInteger idx, BOOL * _Nonnull stop) {
+            XCTAssertNotNil(video);
+            XCTAssertNotNil(video.videoURL);
+            XCTAssertNotNil(video.thumbnailURL);
+        }];
         [downloaded fulfill];
     }];
     
