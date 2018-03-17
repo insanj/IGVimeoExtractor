@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23282D65205DB95600540193 /* IGVimeoExtractor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23282D5E205DB95600540193 /* IGVimeoExtractor.framework */; };
+		23282D66205DB95600540193 /* IGVimeoExtractor.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 23282D5E205DB95600540193 /* IGVimeoExtractor.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		23282D6B205DB96800540193 /* IGVimeoExtractor.h in Headers */ = {isa = PBXBuildFile; fileRef = 54189DCC19D06C88008900CE /* IGVimeoExtractor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		23282D6C205DB96A00540193 /* IGVimeoExtractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 54189DCD19D06C88008900CE /* IGVimeoExtractor.m */; };
 		54189DCE19D06C88008900CE /* IGVimeoExtractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 54189DCD19D06C88008900CE /* IGVimeoExtractor.m */; };
 		54189DCF19D06C88008900CE /* IGVimeoExtractor.m in Sources */ = {isa = PBXBuildFile; fileRef = 54189DCD19D06C88008900CE /* IGVimeoExtractor.m */; };
 		542833AA19CBE387009F8BF9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 542833A919CBE387009F8BF9 /* AppDelegate.m */; };
@@ -31,6 +35,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		23282D63205DB95600540193 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF7E5BFB16D26B8300712F0D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 23282D5D205DB95600540193;
+			remoteInfo = IGVimeoExtractor;
+		};
 		54E825D41C16A808006B284E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BF7E5BFB16D26B8300712F0D /* Project object */;
@@ -40,7 +51,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		23282D6A205DB95600540193 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				23282D66205DB95600540193 /* IGVimeoExtractor.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		23282D5E205DB95600540193 /* IGVimeoExtractor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = IGVimeoExtractor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		23282D60205DB95600540193 /* IGVimeoExtractor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IGVimeoExtractor.h; sourceTree = "<group>"; };
+		23282D61205DB95600540193 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		54189DCC19D06C88008900CE /* IGVimeoExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGVimeoExtractor.h; path = ../IGVimeoExtractor/IGVimeoExtractor.h; sourceTree = "<group>"; };
 		54189DCD19D06C88008900CE /* IGVimeoExtractor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IGVimeoExtractor.m; path = ../IGVimeoExtractor/IGVimeoExtractor.m; sourceTree = "<group>"; };
 		542833A419CBE387009F8BF9 /* SampleMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,6 +102,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		23282D5A205DB95600540193 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		542833A119CBE387009F8BF9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -92,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23282D65205DB95600540193 /* IGVimeoExtractor.framework in Frameworks */,
 				BFA9544916D2D004000BB6D1 /* MediaPlayer.framework in Frameworks */,
 				BF7E5C0716D26B8300712F0D /* UIKit.framework in Frameworks */,
 				BF7E5C0916D26B8300712F0D /* Foundation.framework in Frameworks */,
@@ -102,6 +138,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23282D5F205DB95600540193 /* IGVimeoExtractor */ = {
+			isa = PBXGroup;
+			children = (
+				23282D60205DB95600540193 /* IGVimeoExtractor.h */,
+				23282D61205DB95600540193 /* Info.plist */,
+			);
+			path = IGVimeoExtractor;
+			sourceTree = "<group>";
+		};
 		542833A519CBE387009F8BF9 /* SampleMac */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +184,7 @@
 				BF7E5C0C16D26B8300712F0D /* Sample */,
 				542833A519CBE387009F8BF9 /* SampleMac */,
 				54E825D01C16A808006B284E /* SampleTests */,
+				23282D5F205DB95600540193 /* IGVimeoExtractor */,
 				BF7E5C0516D26B8300712F0D /* Frameworks */,
 				BF7E5C0416D26B8300712F0D /* Products */,
 			);
@@ -150,6 +196,7 @@
 				BF7E5C0316D26B8300712F0D /* Sample.app */,
 				542833A419CBE387009F8BF9 /* SampleMac.app */,
 				54E825CF1C16A808006B284E /* SampleTests.xctest */,
+				23282D5E205DB95600540193 /* IGVimeoExtractor.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,7 +252,36 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		23282D5B205DB95600540193 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23282D6B205DB96800540193 /* IGVimeoExtractor.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		23282D5D205DB95600540193 /* IGVimeoExtractor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23282D69205DB95600540193 /* Build configuration list for PBXNativeTarget "IGVimeoExtractor" */;
+			buildPhases = (
+				23282D59205DB95600540193 /* Sources */,
+				23282D5A205DB95600540193 /* Frameworks */,
+				23282D5B205DB95600540193 /* Headers */,
+				23282D5C205DB95600540193 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IGVimeoExtractor;
+			productName = IGVimeoExtractor;
+			productReference = 23282D5E205DB95600540193 /* IGVimeoExtractor.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		542833A319CBE387009F8BF9 /* SampleMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 542833C219CBE387009F8BF9 /* Build configuration list for PBXNativeTarget "SampleMac" */;
@@ -248,10 +324,12 @@
 				BF7E5BFF16D26B8300712F0D /* Sources */,
 				BF7E5C0016D26B8300712F0D /* Frameworks */,
 				BF7E5C0116D26B8300712F0D /* Resources */,
+				23282D6A205DB95600540193 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				23282D64205DB95600540193 /* PBXTargetDependency */,
 			);
 			name = Sample;
 			productName = Sample;
@@ -268,6 +346,10 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Louis Larpin";
 				TargetAttributes = {
+					23282D5D205DB95600540193 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
 					542833A319CBE387009F8BF9 = {
 						CreatedOnToolsVersion = 6.1;
 					};
@@ -293,11 +375,19 @@
 				BF7E5C0216D26B8300712F0D /* Sample */,
 				542833A319CBE387009F8BF9 /* SampleMac */,
 				54E825CE1C16A808006B284E /* SampleTests */,
+				23282D5D205DB95600540193 /* IGVimeoExtractor */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		23282D5C205DB95600540193 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		542833A219CBE387009F8BF9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -330,6 +420,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		23282D59205DB95600540193 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23282D6C205DB96A00540193 /* IGVimeoExtractor.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		542833A019CBE387009F8BF9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -363,6 +461,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		23282D64205DB95600540193 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 23282D5D205DB95600540193 /* IGVimeoExtractor */;
+			targetProxy = 23282D63205DB95600540193 /* PBXContainerItemProxy */;
+		};
 		54E825D51C16A808006B284E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BF7E5C0216D26B8300712F0D /* Sample */;
@@ -406,6 +509,111 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		23282D67205DB95600540193 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = IGVimeoExtractor/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.IGVimeoExtractor;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		23282D68205DB95600540193 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = IGVimeoExtractor/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.IGVimeoExtractor;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		542833BE19CBE387009F8BF9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -583,10 +791,12 @@
 		BF7E5C2A16D26B8300712F0D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample/Sample-Prefix.pch";
 				INFOPLIST_FILE = "Sample/Sample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -596,10 +806,12 @@
 		BF7E5C2B16D26B8300712F0D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sample/Sample-Prefix.pch";
 				INFOPLIST_FILE = "Sample/Sample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -609,6 +821,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		23282D69205DB95600540193 /* Build configuration list for PBXNativeTarget "IGVimeoExtractor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23282D67205DB95600540193 /* Debug */,
+				23282D68205DB95600540193 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		542833C219CBE387009F8BF9 /* Build configuration list for PBXNativeTarget "SampleMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
